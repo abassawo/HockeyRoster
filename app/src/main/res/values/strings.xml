@@ -4,4 +4,7 @@
 
     <string name="connection_error_msg">There was an error with the network</string>
     <string name="connect">Connect</string>
+    <string name="search">Search</string>
+    <string name="next">Next</string>
+    <string name="last_profile_alert">This is the last profile</string>
 </resources>

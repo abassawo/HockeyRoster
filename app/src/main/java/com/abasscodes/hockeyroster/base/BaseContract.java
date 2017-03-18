@@ -4,8 +4,9 @@ import android.support.annotation.StringRes;
 
 public class BaseContract {
     public interface View {
-        void showSnackbar(@StringRes int errorRes, @StringRes int actionTextRes);
-        void dismissSnackBar();
+        void showConnectionSettings();
+
+        void showMessage(String message);
     }
 
     public interface Presenter<T extends View> {

@@ -15,10 +15,8 @@ public abstract class BasePresenter<T extends BaseContract.View> implements Base
     public void bindView(T view) {
         this.view = view;
 
-        if (!isViewBound) {
-            onViewBound();
-            isViewBound = true;
-        }
+        onViewBound();
+        isViewBound = true;
     }
 
     public void onViewCreated() {

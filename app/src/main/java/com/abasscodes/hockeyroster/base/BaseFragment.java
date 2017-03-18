@@ -2,8 +2,10 @@ package com.abasscodes.hockeyroster.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +22,8 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
     private static final String TAG = BaseFragment.class.getSimpleName();
     protected T presenter;
 
+    protected abstract @LayoutRes int getLayoutResourceId();
+
     @Override
     @CallSuper
     public void onAttach(Context context) {
@@ -34,22 +38,29 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
         presenter = createPresenter();
     }
 
+    protected boolean hasArguments() {
+        return getArguments() != null;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_roster, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(getLayoutResourceId(), container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        onViewCreated(savedInstanceState);
         ButterKnife.bind(this, view);
+        onViewCreated(savedInstanceState);
         presenter.onViewCreated();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     protected void onViewCreated(@Nullable Bundle savedInstanceState) {
@@ -59,6 +70,12 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
     public abstract T createPresenter();
 
     protected abstract void handleAction(int actionText);
+
+    protected void setActionBarDisplayHomeAsUpEnabled(boolean enabled) {
+        if (getActivity().getActionBar() != null) {
+            getActivity().getActionBar().setDisplayHomeAsUpEnabled(enabled);
+        }
+    }
 
     @Override
     @CallSuper
