@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by abass on 3/18/17.
+ * Created by abass on 3/19/17.
  */
 
-public class TextFilterHelper {
+public class TextFilterer {
 
-    public static List<Contact> filter(List<Contact> contacts, String query) {
+    public List<Contact> filter(List<Contact> contacts, String query) {
         query = query.toLowerCase();
         final List<Contact> filteredResults = new ArrayList<>();
 
