@@ -22,6 +22,7 @@ import com.abasscodes.hockeyroster.base.BaseMvpActivity;
 import com.abasscodes.hockeyroster.screens.detailscreen.ViewPagerAdapter;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.utils.PageChangedListener;
+import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 
 import java.util.List;
 
@@ -53,9 +54,9 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
 
     @NonNull
     @Override
-    public MainScreenContract.Presenter createPresenter() {
+    public MainScreenContract.Presenter createPresenter(PresenterConfiguration configuration) {
         presenter = (MainScreenContract.Presenter) getLastCustomNonConfigurationInstance();
-        presenter = presenter == null ? new MainScreenPresenter(this) : presenter;
+        presenter = presenter == null ? new MainScreenPresenter(this, configuration) : presenter;
         contactListAdapter = new ContactAdapter(presenter);
         detailViewPagerAdapter = new ViewPagerAdapter(this);
         presenter.bindView(this);
@@ -66,8 +67,6 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setSupportActionBar(toolbar);
-        contactListAdapter = new ContactAdapter(presenter);
-        detailViewPagerAdapter = new ViewPagerAdapter(this);
         initializeViews();
     }
 
@@ -123,6 +122,7 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
 
     @Override
     public void showContactList(List<Contact> contacts) {
+        navigateBackToListScreen();
         rosterRecyclerView.setVisibility(View.VISIBLE);
         contactListAdapter.setData(contacts);
     }
@@ -134,6 +134,7 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
 
     @Override
     public void showContact(int index) {
+        navigateBackToListScreen();
         detailViewPager.setCurrentItem(index);
     }
 

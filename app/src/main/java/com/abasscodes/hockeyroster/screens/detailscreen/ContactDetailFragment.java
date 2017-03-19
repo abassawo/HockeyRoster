@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.base.BaseFragment;
 import com.abasscodes.hockeyroster.model.Contact;
+import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -67,9 +68,9 @@ public class ContactDetailFragment extends BaseFragment<ContactDetailContract.Pr
 
     @NonNull
     @Override
-    public ContactDetailContract.Presenter createPresenter() {
+    public ContactDetailContract.Presenter createPresenter(PresenterConfiguration configuration) {
         Contact contact = hasArguments() ? getArguments().getParcelable(CONTACT_EXTRA_KEY) : null;
-        return new ContactDetailPresenter(this, contact);
+        return new ContactDetailPresenter(this, configuration, contact);
     }
 
     @Override

@@ -7,36 +7,42 @@ import com.abasscodes.hockeyroster.base.BasePresenter;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.model.ContactWrapper;
 import com.abasscodes.hockeyroster.network.RosterClient;
+import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 import com.abasscodes.hockeyroster.utils.TextFilterHelper;
 
 import java.util.List;
 
+import io.reactivex.disposables.Disposable;
+import timber.log.Timber;
+
 class MainScreenPresenter extends BasePresenter<MainScreenContract.View> implements MainScreenContract.Presenter {
-    @VisibleForTesting
-    boolean detailMode = false;
+    private boolean detailMode = false;
     private List<Contact> contacts = null;
     private int currentDetailPage = 0;
+    private Disposable disposable;
 
-    MainScreenPresenter(@NonNull MainScreenContract.View view) {
-        super(view);
+    MainScreenPresenter(@NonNull MainScreenContract.View view,
+                        PresenterConfiguration configuration) {
+        super(view, configuration);
     }
 
     @Override
     protected void onViewBound() {
         super.onViewBound();
-        if(detailMode) {
-            if (contacts != null) {
-                view.onContactsReady(contacts);
-                showDetail(contacts.get(currentDetailPage));
-            }
+        Timber.d("Detail mode " + detailMode);
+
+        if (contacts != null) {
+            view.onContactsReady(contacts);
+            showDetail(contacts.get(currentDetailPage));
         }
+
         view.checkInternetAccess();
     }
 
     @Override
     public void onInternetAccessCheckResult(boolean internetOn) {
         if (internetOn) {
-            RosterClient.getInstance(this).loadRosterList();
+            disposable = RosterClient.getInstance(this).loadRosterList(configuration);
         } else {
             view.showMessage("Error retrofitting");
         }
@@ -49,19 +55,22 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
 
     @Override
     public void onBackPressed() {
-        if(detailMode){
-            doBackwardsDetailNavigation();
+        if (detailMode) {
+            showList();
         } else {
-            //have view do super on backpressed.
+            view.dismiss();
         }
     }
 
     @Override
     public void onQueryChanged(String query) {
-        if (query.length() > 0){
+        if (contacts == null) {
+            return;
+        }
+        if (query.length() > 0) {
             final List<Contact> filteredContacts = TextFilterHelper.filter(contacts, query);
             view.showContactList(filteredContacts);
-            if (detailMode){
+            if (detailMode) {
                 view.navigateBackToListScreen();
             }
         } else {
@@ -71,25 +80,17 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
 
     @Override
     public void onPageSwiped(int currentItem) {
-        if(currentItem < contacts.size()) {
+        if (currentItem < contacts.size()) {
             view.setTitle(contacts.get(currentItem).getName());
         }
     }
 
-    private void doBackwardsDetailNavigation() {
-        if(detailMode){
-            showList();
-        } else {
-            view.dismiss();
-        }
-    }
-
-    private void showDetail(Contact contact){
+    private void showDetail(Contact contact) {
         detailMode = true;
         currentDetailPage = contacts.indexOf(contact);
         view.showContact(currentDetailPage);
-        view.setTitle(contact.getName());
         view.navigateBackToDetailScreen();
+        view.setTitle(contact.getName());
     }
 
     private void showList() {
@@ -107,15 +108,23 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
     public void onRosterLoaded(ContactWrapper roster) {
         this.contacts = roster.getContacts();
         view.onContactsReady(contacts);
-        if(detailMode){
-            view.showContactList(contacts);
+        if (detailMode) {
+            showDetail(contacts.get(currentDetailPage));
         } else {
-            showList();
+            view.showContactList(contacts);
         }
     }
 
     @Override
     public void onFailure(String errorMsg) {
-        view.showMessage(errorMsg);
+        if (view != null) {
+            view.showMessage(errorMsg);
+        }
+    }
+
+    @Override
+    public void onViewDestroyed() {
+        super.onViewDestroyed();
+        disposable.dispose();
     }
 }

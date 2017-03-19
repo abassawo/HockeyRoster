@@ -4,17 +4,15 @@ import android.support.annotation.NonNull;
 
 import com.abasscodes.hockeyroster.base.BasePresenter;
 import com.abasscodes.hockeyroster.model.Contact;
-
-/**
- * Created by abass on 3/18/17.
- */
+import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 
 class ContactDetailPresenter extends BasePresenter<ContactDetailContract.View> implements ContactDetailContract.Presenter{
 
     private final Contact contact;
 
-    ContactDetailPresenter(@NonNull ContactDetailContract.View view, Contact contact) {
-        super(view);
+    ContactDetailPresenter(@NonNull ContactDetailContract.View view,
+                           PresenterConfiguration configuration, Contact contact) {
+        super(view, configuration);
         this.contact = contact;
     }
 
