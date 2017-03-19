@@ -17,12 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.abasscodes.hockeyroster.PageChangedListener;
 import com.abasscodes.hockeyroster.R;
-import com.abasscodes.hockeyroster.ViewPagerAdapter;
 import com.abasscodes.hockeyroster.base.BaseMvpActivity;
-import com.abasscodes.hockeyroster.mainscreen.showcontactsrv.ContactAdapter;
+import com.abasscodes.hockeyroster.contactdetail.ViewPagerAdapter;
 import com.abasscodes.hockeyroster.model.Contact;
+import com.abasscodes.hockeyroster.utils.PageChangedListener;
 
 import java.util.List;
 
@@ -96,20 +95,17 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
         MenuItem searchItem = menu.findItem(R.id.menu_item_search);
         searchItem.setVisible(searchIconVisible);
         final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setOnSearchClickListener(v -> presenter.onSearchEntered(String.valueOf(
-                searchView.getQuery())));
 
         searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                presenter.onSearchEntered(query);
-                searchView.onActionViewCollapsed();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                presenter.onQueryChanged(newText);
+                return true;
             }
         });
         return true;
@@ -126,18 +122,10 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
     }
 
     @Override
-    public void showContactListPage() {
-        setActionBarAsUp(false);
-        toolbar.setTitle(R.string.app_name);
-        toolbar.setSubtitle("");
-        collapsingToolbar.setTitle(getString(R.string.app_name));
-        appbar.setExpanded(false);
-        searchIconVisible = true;
-        supportInvalidateOptionsMenu();
-        detailViewPager.setVisibility(View.GONE);
+    public void showContactList(List<Contact> contacts) {
         rosterRecyclerView.setVisibility(View.VISIBLE);
+        contactListAdapter.setData(contacts);
     }
-
     @Override
     public void onContactsReady(List<Contact> contacts) {
         contactListAdapter.setData(contacts);
@@ -146,12 +134,29 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
 
     @Override
     public void showContact(int index) {
+        detailViewPager.setCurrentItem(index);
+    }
+
+    @Override
+    public void navigateBackToListScreen() {
+        setActionBarAsUp(false);
+        toolbar.setTitle(R.string.app_name);
+        toolbar.setSubtitle("");
+        collapsingToolbar.setTitle(getString(R.string.app_name));
+        appbar.setExpanded(false);
+        searchIconVisible = true;
+        supportInvalidateOptionsMenu();
+        detailViewPager.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public void navigateBackToDetailScreen() {
         appbar.setExpanded(false);
         searchIconVisible = false;
         setActionBarAsUp(true);
         supportInvalidateOptionsMenu();
         rosterRecyclerView.setVisibility(View.GONE);
-        detailViewPager.setCurrentItem(index);
         detailViewPager.setVisibility(View.VISIBLE);
     }
 

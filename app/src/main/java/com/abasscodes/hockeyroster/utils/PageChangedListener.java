@@ -1,4 +1,4 @@
-package com.abasscodes.hockeyroster;
+package com.abasscodes.hockeyroster.utils;
 
 import android.support.v4.view.ViewPager;
 
@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 public abstract class PageChangedListener implements ViewPager.OnPageChangeListener {
 
     public void onPageChanged() {
-
+        
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.abasscodes.hockeyroster.R;
+import com.abasscodes.hockeyroster.model.Contact;
 
 import butterknife.ButterKnife;
 
@@ -29,6 +30,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     public interface OnItemClickListener {
-        void onItemClicked(int position);
+        void onContactClicked(Contact contact);
     }
 }

@@ -1,4 +1,4 @@
-package com.abasscodes.hockeyroster.mainscreen.showcontactsrv;
+package com.abasscodes.hockeyroster.mainscreen;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;

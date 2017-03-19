@@ -1,12 +1,12 @@
 package com.abasscodes.hockeyroster.mainscreen;
 
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
 
 import com.abasscodes.hockeyroster.base.BasePresenter;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.model.ContactWrapper;
 import com.abasscodes.hockeyroster.network.RosterClient;
+import com.abasscodes.hockeyroster.utils.TextFilterHelper;
 
 import java.util.List;
 
@@ -52,8 +52,16 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
     }
 
     @Override
-    public void onSearchEntered(String query) {
-
+    public void onQueryChanged(String query) {
+        if (query.length() > 0){
+            final List<Contact> filteredContacts = TextFilterHelper.filter(contacts, query);
+            view.showContactList(filteredContacts);
+            if (detailMode){
+                view.navigateBackToListScreen();
+            }
+        } else {
+            view.showContactList(contacts);
+        }
     }
 
     @Override
@@ -71,29 +79,31 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
         }
     }
 
-    private void showDetail(int position){
+    private void showDetail(Contact contact){
         detailMode = true;
-        currentDetailPage = position;
-        view.showContact(position);
-        view.setTitle(contacts.get(position).getName());
+        view.navigateBackToDetailScreen();
+        currentDetailPage = contacts.indexOf(contact);
+        view.showContact(currentDetailPage);
+        view.setTitle(contact.getName());
     }
 
     private void showList() {
         detailMode = false;
-        view.showContactListPage();
+        view.showContactList(contacts);
+        view.navigateBackToListScreen();
     }
 
     @Override
-    public void onItemClicked(int position) {
-        showDetail(position);
+    public void onContactClicked(Contact contact) {
+        showDetail(contact);
     }
 
     @Override
     public void onRosterLoaded(ContactWrapper roster) {
         this.contacts = roster.getContacts();
-        view.onContactsReady(roster.getContacts());
+        view.onContactsReady(contacts);
         if(detailMode){
-            view.showContactListPage();
+            view.showContactList(contacts);
         } else {
             showList();
         }
@@ -101,6 +111,6 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
 
     @Override
     public void onFailure(String errorMsg) {
-//        view.showMessage(errorMsg);
+        view.showMessage(errorMsg);
     }
 }

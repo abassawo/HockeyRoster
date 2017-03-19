@@ -12,11 +12,15 @@ class MainScreenContract {
 
         void onContactsReady(List<Contact> contacts);
 
-        void showContact(int pageForContact);
+        void showContact(int index);
 
         void checkInternetAccess();
 
-        void showContactListPage();
+        void showContactList(List<Contact> contacts);
+
+        void navigateBackToListScreen();
+
+        void navigateBackToDetailScreen();
 
         void dismiss();
 
@@ -31,7 +35,7 @@ class MainScreenContract {
 
         void onBackPressed();
 
-        void onSearchEntered(String query);
+        void onQueryChanged(String query);
 
         void onPageSwiped(int currentItem);
     }

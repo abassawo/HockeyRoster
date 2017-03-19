@@ -1,4 +1,4 @@
-package com.abasscodes.hockeyroster;
+package com.abasscodes.hockeyroster.contactdetail;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -57,5 +57,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return fragmentTitles.get(position);
+    }
+
+    public int indexOf(Contact contact) {
+       return fragmentTitles.indexOf(contact.getName());
     }
 }
