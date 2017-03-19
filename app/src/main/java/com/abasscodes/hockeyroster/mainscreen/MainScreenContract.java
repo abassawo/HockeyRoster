@@ -1,9 +1,10 @@
-package com.abasscodes.hockeyroster.screens.mainscreen;
+package com.abasscodes.hockeyroster.mainscreen;
 
 import com.abasscodes.hockeyroster.base.BaseContract;
 import com.abasscodes.hockeyroster.base.BaseViewHolder;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.network.RosterClient;
+import com.abasscodes.hockeyroster.utils.CustomSnapHelper;
 
 import java.util.List;
 
@@ -22,13 +23,14 @@ class MainScreenContract {
 
         void navigateBackToDetailScreen();
 
-        void dismiss();
+        void dismissScreen();
 
         void setTitle(String name);
 
     }
 
-    interface Presenter extends BaseContract.Presenter<View>, RosterClient.OnClientResponseListener, BaseViewHolder.OnItemClickListener{
+    interface Presenter extends BaseContract.Presenter<View>, RosterClient.OnClientResponseListener,
+            BaseViewHolder.OnItemClickListener, CustomSnapHelper.OnPageSwipeListener{
         void onInternetAccessCheckResult(boolean internetOn);
 
         void onShowConnectionSettingsClicked();
@@ -36,7 +38,5 @@ class MainScreenContract {
         void onBackPressed();
 
         void onQueryChanged(String query);
-
-        void onPageSwiped(int currentItem);
     }
 }

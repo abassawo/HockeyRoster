@@ -29,8 +29,6 @@ public class RosterClient {
     private static RosterClient clientInstance;
     private final OnClientResponseListener listener;
     private static RosterApi rosterApi;
-    private Scheduler ioScheduler = Schedulers.io();
-    private Scheduler uiScheduler = AndroidSchedulers.mainThread();
 
     public static RosterApi getApi() {
         return rosterApi;

@@ -61,6 +61,6 @@ public abstract class BasePresenter<T extends BaseContract.View> implements Base
 
     @Override
     public void onViewDestroyed() {
-
+        disposable.dispose();
     }
 }

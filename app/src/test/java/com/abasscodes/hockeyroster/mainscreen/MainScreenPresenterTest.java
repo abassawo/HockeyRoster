@@ -1,28 +1,21 @@
-package com.abasscodes.hockeyroster.screens.mainscreen;
+package com.abasscodes.hockeyroster.mainscreen;
 
-import com.abasscodes.hockeyroster.base.BasePresenter;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.model.ContactWrapper;
 import com.abasscodes.hockeyroster.testUtils.BasePresenterTest;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
+import java.util.Iterator;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,12 +31,14 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
     List<Contact> mockContacts;
     @Mock
     Contact mockContact;
+    @Mock
+    Iterator<Contact> mockIterator;
 
     @Before
     public void setup() {
         presenter = new MainScreenPresenter(mockView, testConfiguration);
         presenter.onViewCreated();
-        presenter.onViewBound();
+        when(mockContacts.size()).thenReturn(14);
         ContactWrapper contactWrapper = new ContactWrapper(mockContacts);
         presenter.onRosterLoaded(contactWrapper);
     }
@@ -51,6 +46,7 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
 
     @Test
     public void onViewBoundShouldCauseViewToCheckInternetAccess() {
+        presenter.onViewBound();
         verify(mockView).checkInternetAccess();
     }
 
@@ -59,14 +55,56 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
         presenter.onBackPressed();
         verify(mockView).showContactList(any());
         verify(mockView).navigateBackToListScreen();
+        verify(mockView).showContactList(anyList());
     }
 
     @Test
-    public void onViewBoundShouldCauseViewToResumeDetailPageIfDetailModeIsTrue() {
+    public void onRosterLoadedWhenInDetailModeShouldCauseViewToReloadDetailPage() {
+        when(mockContact.getName()).thenReturn("Tester");
         when(mockContacts.get(anyInt())).thenReturn(mockContact);
         presenter.onContactClicked(mockContact);
-        presenter.onViewBound();
+        presenter.onRosterLoaded(new ContactWrapper(mockContacts));
         verify(mockView, times(2)).showContact(anyInt());
+        verify(mockView, times(2)).setTitle(anyString());
+    }
+
+    @Test
+    public void onQueryChangedShouldDoNothingWhenDataIsNull() {
+        presenter.onRosterLoaded(new ContactWrapper(null));
+        presenter.onQueryChanged("Test");
+        verify(mockView, times(1)).showContactList(anyList());
+
+    }
+
+    @Test
+    public void onQueryChangedToZeroLengthStringShouldCauseViewToShowOriginalListAgain() {
+        presenter.onViewBound();
+        String EMPTY_TEXT = "";
+        presenter.onQueryChanged(EMPTY_TEXT);
+        verify(mockView, times(2)).showContactList(mockContacts);
+    }
+
+    @Test
+    public void onQueryChangedToValidTextShouldCauseViewToShowSearchedSubList() {
+        when(mockIterator.next()).thenReturn(mockContact);
+        when(mockContacts.iterator()).thenReturn(mockIterator);
+        String VALID_TEXT = "test";
+        presenter.onQueryChanged(VALID_TEXT);
+        verify(mockView).showContactList(argThat(argument -> argument.size() < mockContacts.size()));
+    }
+
+    @Test
+    public void onBackPressedWhenInDetailModeShouldCauseViewToReturnToListScreen() {
+        presenter.onContactClicked(mockContact);
+        presenter.onBackPressed();
+        verify(mockView, times(2)).navigateBackToListScreen();
+    }
+
+    @Test
+    public void onViewBoundShouldCauseViewToResumeListPageIfDetailModeIsTrue() {
+        when(mockContacts.get(anyInt())).thenReturn(mockContact);
+        presenter.onContactClicked(mockContact);
+        verify(mockView).showContact(anyInt());
     }
 
     @Test
@@ -98,5 +136,11 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
         presenter.onInternetAccessCheckResult(true);
         testConfiguration.triggerRxSchedulers();
         verify(mockView).onContactsReady(mockContacts);
+    }
+
+    @Test
+    public void onRosterLoadingFailureShouldCauseViewToShowErrorMessage() {
+        presenter.onFailure(anyString());
+        verify(mockView).showMessage(anyString());
     }
 }

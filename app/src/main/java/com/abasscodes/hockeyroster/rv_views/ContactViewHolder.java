@@ -1,5 +1,6 @@
-package com.abasscodes.hockeyroster.screens.mainscreen;
+package com.abasscodes.hockeyroster.rv_views;
 
+import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -23,16 +24,17 @@ public class ContactViewHolder extends BaseViewHolder implements OnClickListener
     ImageView contactAvatar;
     private Contact contact;
 
-    ContactViewHolder(ViewGroup parent, OnItemClickListener listener) {
-        super(parent, R.layout.contact_row_item, listener);
-        itemView.setOnClickListener(this);
+    public ContactViewHolder(ViewGroup parent, @LayoutRes int layoutRes, OnItemClickListener listener) {
+        super(parent, layoutRes, listener);
     }
 
-    void bindContact(Contact contact) {
+    public void bindContact(Contact contact) {
         this.contact = contact;
         contactNameTextView.setText(contact.getName());
         contactPositionTextField.setText(contact.getPosition());
-        Picasso.with(itemView.getContext()).load(contact.getImageUrl()).into(contactAvatar);
+        final String imageUrl = contact.getImageUrl();
+        Picasso.with(itemView.getContext()).load(imageUrl).into(contactAvatar);
+        itemView.setOnClickListener(this);
     }
 
     @Override

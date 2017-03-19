@@ -1,27 +1,29 @@
-package com.abasscodes.hockeyroster.screens.mainscreen;
+package com.abasscodes.hockeyroster.mainscreen;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.abasscodes.hockeyroster.ContactAdapter;
 import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.base.BaseMvpActivity;
-import com.abasscodes.hockeyroster.screens.detailscreen.ViewPagerAdapter;
 import com.abasscodes.hockeyroster.model.Contact;
-import com.abasscodes.hockeyroster.utils.PageChangedListener;
+import com.abasscodes.hockeyroster.rv_views.ViewPagerAdapter;
+import com.abasscodes.hockeyroster.utils.CustomSnapHelper;
 import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 
 import java.util.List;
@@ -36,7 +38,7 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
     @BindView(R.id.roster_recycler_view)
     RecyclerView rosterRecyclerView;
     @BindView(R.id.roster_detail_viewpager)
-    ViewPager detailViewPager;
+    RecyclerView detailViewPager;
     @BindView(R.id.appbar)
     AppBarLayout appbar;
     @BindView(R.id.collapsing_toolbar)
@@ -44,7 +46,7 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
     @BindView(R.id.image_backdrop)
     ImageView imageBackdrop;
     private ContactAdapter contactListAdapter;
-    private ViewPagerAdapter detailViewPagerAdapter;
+    private ContactAdapter detailViewPagerAdapter;
     private boolean searchIconVisible = true;
 
     @Override
@@ -58,7 +60,7 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
         presenter = (MainScreenContract.Presenter) getLastCustomNonConfigurationInstance();
         presenter = presenter == null ? new MainScreenPresenter(this, configuration) : presenter;
         contactListAdapter = new ContactAdapter(presenter);
-        detailViewPagerAdapter = new ViewPagerAdapter(this);
+        detailViewPagerAdapter = new ViewPagerAdapter(presenter);
         presenter.bindView(this);
         return presenter;
     }
@@ -66,9 +68,14 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        detailViewPager.setVisibility(View.GONE);
         setSupportActionBar(toolbar);
         initializeViews();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        detailViewPager.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -79,14 +86,10 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
     private void initializeViews() {
         rosterRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rosterRecyclerView.setAdapter(contactListAdapter);
+        detailViewPager.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         detailViewPager.setAdapter(detailViewPagerAdapter);
-        detailViewPager.addOnPageChangeListener(new PageChangedListener() {
-            @Override
-            public void onPageChanged() {
-                super.onPageChanged();
-                presenter.onPageSwiped(detailViewPager.getCurrentItem());
-            }
-        });
+        SnapHelper snapHelper = new CustomSnapHelper(presenter);
+        snapHelper.attachToRecyclerView(detailViewPager);
     }
 
     @Override
@@ -134,8 +137,8 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
 
     @Override
     public void showContact(int index) {
-        navigateBackToListScreen();
-        detailViewPager.setCurrentItem(index);
+        navigateBackToDetailScreen();
+        detailViewPager.scrollToPosition(index);
     }
 
     @Override
@@ -147,7 +150,7 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
         appbar.setExpanded(false);
         searchIconVisible = true;
         supportInvalidateOptionsMenu();
-        detailViewPager.setVisibility(View.GONE);
+        detailViewPager.setVisibility(View.INVISIBLE);
     }
 
 
@@ -157,12 +160,12 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
         searchIconVisible = false;
         setActionBarAsUp(true);
         supportInvalidateOptionsMenu();
-        rosterRecyclerView.setVisibility(View.GONE);
         detailViewPager.setVisibility(View.VISIBLE);
+        rosterRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     @Override
-    public void dismiss() {
+    public void dismissScreen() {
         moveTaskToBack(true);
     }
 

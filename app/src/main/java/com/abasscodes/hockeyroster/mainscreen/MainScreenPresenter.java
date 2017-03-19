@@ -1,44 +1,32 @@
-package com.abasscodes.hockeyroster.screens.mainscreen;
+package com.abasscodes.hockeyroster.mainscreen;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 
 import com.abasscodes.hockeyroster.base.BasePresenter;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.model.ContactWrapper;
 import com.abasscodes.hockeyroster.network.RosterClient;
 import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
-import com.abasscodes.hockeyroster.utils.TextFilterHelper;
+import com.abasscodes.hockeyroster.utils.TextFilterer;
 
 import java.util.List;
 
-import io.reactivex.disposables.Disposable;
-import timber.log.Timber;
-
 class MainScreenPresenter extends BasePresenter<MainScreenContract.View> implements MainScreenContract.Presenter {
-    private boolean detailMode = false;
+    private boolean detailMode;
     private List<Contact> contacts = null;
     private int currentDetailPage = 0;
-    private Disposable disposable;
+    private TextFilterer textFilterer;
 
     MainScreenPresenter(@NonNull MainScreenContract.View view,
                         PresenterConfiguration configuration) {
         super(view, configuration);
+        textFilterer = new TextFilterer();
     }
 
     @Override
     protected void onViewBound() {
         super.onViewBound();
-        Timber.d("Detail mode " + detailMode);
-//        if (contacts != null) {
-////            view.onContactsReady(contacts);
-//            if(detailMode) {
-//                showDetail(contacts.get(currentDetailPage));
-//            } else {
-//                view.showContactList(contacts);
-//            }
-//        }
-
+        detailMode = false;
         view.checkInternetAccess();
     }
 
@@ -61,7 +49,7 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
         if (detailMode) {
             showList();
         } else {
-            view.dismiss();
+            view.dismissScreen();
         }
     }
 
@@ -71,10 +59,7 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
             return;
         }
         if (query.length() > 0) {
-            final List<Contact> filteredContacts = TextFilterHelper.filter(contacts, query);
-            if (detailMode) {
-                view.navigateBackToListScreen();
-            }
+            final List<Contact> filteredContacts = textFilterer.filter(contacts, query);
             view.showContactList(filteredContacts);
         } else {
             view.showContactList(contacts);
@@ -83,7 +68,7 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
 
     @Override
     public void onPageSwiped(int currentItem) {
-        if (currentItem < contacts.size()) {
+        if (currentItem >= 0 && currentItem < contacts.size()) {
             view.setTitle(contacts.get(currentItem).getName());
         }
     }
@@ -92,7 +77,6 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
         detailMode = true;
         currentDetailPage = contacts.indexOf(contact);
         view.showContact(currentDetailPage);
-        view.navigateBackToDetailScreen();
         view.setTitle(contact.getName());
     }
 
@@ -115,7 +99,6 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
             showDetail(contacts.get(currentDetailPage));
         } else {
             view.navigateBackToListScreen();
-            view.navigateBackToListScreen();
             view.showContactList(contacts);
         }
     }
@@ -125,11 +108,5 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
         if (view != null) {
             view.showMessage(errorMsg);
         }
-    }
-
-    @Override
-    public void onViewDestroyed() {
-        super.onViewDestroyed();
-        disposable.dispose();
     }
 }

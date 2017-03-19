@@ -12,7 +12,7 @@
         >
 
         <ImageView
-            android:id="@+id/detail_contact_avatar"
+            android:id="@+id/contact_avatar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/detail_backdrop_height"
             android:fitsSystemWindows="true"
@@ -33,10 +33,9 @@
                 >
 
                 <TextView
-                    android:id="@+id/detail_contact_name_textview"
+                    android:id="@+id/contact_name_textview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Info"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     />
 
@@ -63,10 +62,9 @@
                 >
 
                 <TextView
-                    android:id="@+id/detail_contact_team_position"
+                    android:id="@+id/contact_team_position"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Friends"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     />
 
