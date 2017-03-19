@@ -1,5 +1,7 @@
 package com.abasscodes.hockeyroster.mainscreen;
 
+import com.abasscodes.hockeyroster.mainscreen.rosterlist.MainScreenContract;
+import com.abasscodes.hockeyroster.mainscreen.rosterlist.MainScreenPresenter;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.model.ContactWrapper;
 import com.abasscodes.hockeyroster.testUtils.BasePresenterTest;

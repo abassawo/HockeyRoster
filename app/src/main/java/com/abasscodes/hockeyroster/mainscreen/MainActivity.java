@@ -18,11 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.abasscodes.hockeyroster.ContactAdapter;
 import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.base.BaseMvpActivity;
 import com.abasscodes.hockeyroster.model.Contact;
-import com.abasscodes.hockeyroster.rv_views.ViewPagerAdapter;
 import com.abasscodes.hockeyroster.utils.CustomSnapHelper;
 import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 
@@ -60,7 +58,7 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
         presenter = (MainScreenContract.Presenter) getLastCustomNonConfigurationInstance();
         presenter = presenter == null ? new MainScreenPresenter(this, configuration) : presenter;
         contactListAdapter = new ContactAdapter(presenter);
-        detailViewPagerAdapter = new ViewPagerAdapter(presenter);
+        detailViewPagerAdapter = new ContactAdapter(R.layout.contact_detail_viewpage_item, presenter);
         presenter.bindView(this);
         return presenter;
     }

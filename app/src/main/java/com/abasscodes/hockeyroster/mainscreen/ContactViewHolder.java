@@ -1,4 +1,4 @@
-package com.abasscodes.hockeyroster.rv_views;
+package com.abasscodes.hockeyroster.mainscreen;
 
 import android.support.annotation.LayoutRes;
 import android.view.View;
