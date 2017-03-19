@@ -1,6 +1,4 @@
-package com.abasscodes.hockeyroster.contactdetail;
-
-import android.support.v4.view.ViewPager;
+package com.abasscodes.hockeyroster.screens.detailscreen;
 
 import com.abasscodes.hockeyroster.base.BaseContract;
 import com.abasscodes.hockeyroster.model.Contact;

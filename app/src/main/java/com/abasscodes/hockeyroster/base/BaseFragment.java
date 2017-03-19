@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.abasscodes.hockeyroster.R;
+import com.abasscodes.hockeyroster.RosterApplication;
+import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -35,7 +37,11 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        presenter = createPresenter();
+        presenter = createPresenter(getRosterApplication().getPresenterConfiguration());
+    }
+
+    private RosterApplication getRosterApplication() {
+        return (RosterApplication) getActivity().getApplication();
     }
 
     protected boolean hasArguments() {
@@ -67,7 +73,7 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
     }
 
     @NonNull
-    public abstract T createPresenter();
+    public abstract T createPresenter(PresenterConfiguration configuration);
 
     protected abstract void handleAction(int actionText);
 

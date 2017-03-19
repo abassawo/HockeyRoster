@@ -1,4 +1,4 @@
-package com.abasscodes.hockeyroster.mainscreen;
+package com.abasscodes.hockeyroster.screens.mainscreen;
 
 import com.abasscodes.hockeyroster.base.BaseContract;
 import com.abasscodes.hockeyroster.base.BaseViewHolder;

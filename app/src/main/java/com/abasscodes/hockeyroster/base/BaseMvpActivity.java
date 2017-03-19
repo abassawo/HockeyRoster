@@ -10,6 +10,9 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
+import com.abasscodes.hockeyroster.RosterApplication;
+import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
+
 import butterknife.ButterKnife;
 
 public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends AppCompatActivity implements BaseContract.View {
@@ -17,7 +20,7 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
     protected T presenter;
 
     @NonNull
-    public abstract T createPresenter();
+    public abstract T createPresenter(PresenterConfiguration configuration);
 
     protected abstract  @LayoutRes int getLayoutRes();
 
@@ -26,9 +29,13 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
         super.onCreate(savedInstanceState);
         setContentView(getLayoutRes());
         ButterKnife.bind(this);
-        presenter = createPresenter();
+        presenter = createPresenter(getRosterApplication().getPresenterConfiguration());
         onViewCreated(savedInstanceState);
         presenter.onViewCreated();
+    }
+
+    private RosterApplication getRosterApplication() {
+        return (RosterApplication) getApplication();
     }
 
     protected void setActionBarTitle(@StringRes int titleResource) {

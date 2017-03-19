@@ -1,4 +1,4 @@
-package com.abasscodes.hockeyroster.contactdetail;
+package com.abasscodes.hockeyroster.screens.detailscreen;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 
 import com.abasscodes.hockeyroster.base.BaseFragment;
-import com.abasscodes.hockeyroster.contactdetail.ContactDetailFragment;
 import com.abasscodes.hockeyroster.model.Contact;
 
 import java.util.ArrayList;

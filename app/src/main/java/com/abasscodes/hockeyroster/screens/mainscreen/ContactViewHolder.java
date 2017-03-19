@@ -1,6 +1,5 @@
-package com.abasscodes.hockeyroster.mainscreen;
+package com.abasscodes.hockeyroster.screens.mainscreen;
 
-import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
