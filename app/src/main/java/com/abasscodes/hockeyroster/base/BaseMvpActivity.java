@@ -6,7 +6,6 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
@@ -22,7 +21,9 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
     @NonNull
     public abstract T createPresenter(PresenterConfiguration configuration);
 
-    protected abstract  @LayoutRes int getLayoutRes();
+    protected abstract
+    @LayoutRes
+    int getLayoutRes();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,25 +35,17 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
         presenter.onViewCreated();
     }
 
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        //Used to persist presenter data throughout configuration changes.
+        return presenter;
+    }
+
     private RosterApplication getRosterApplication() {
         return (RosterApplication) getApplication();
     }
 
-    protected void setActionBarTitle(@StringRes int titleResource) {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(titleResource);
-        }
-    }
-
-    protected void setActionBarTitle(String title) {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(title);
-        }
-    }
-
-    protected void setActionBarAsUp(boolean upNavigation){
+    protected void setActionBarAsUp(boolean upNavigation) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(upNavigation);

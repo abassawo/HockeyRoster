@@ -20,13 +20,13 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
     MainScreenPresenter(@NonNull MainScreenContract.View view,
                         PresenterConfiguration configuration) {
         super(view, configuration);
+        detailMode = false;
         textFilterer = new TextFilterer();
     }
 
     @Override
     protected void onViewBound() {
         super.onViewBound();
-        detailMode = false;
         view.checkInternetAccess();
     }
 
@@ -82,7 +82,6 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
 
     private void showList() {
         detailMode = false;
-        view.navigateBackToListScreen();
         view.showContactList(contacts);
     }
 
@@ -98,7 +97,6 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
         if (detailMode) {
             showDetail(contacts.get(currentDetailPage));
         } else {
-            view.navigateBackToListScreen();
             view.showContactList(contacts);
         }
     }
