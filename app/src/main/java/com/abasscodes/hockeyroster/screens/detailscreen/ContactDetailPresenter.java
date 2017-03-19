@@ -1,4 +1,4 @@
-package com.abasscodes.hockeyroster.contactdetail;
+package com.abasscodes.hockeyroster.screens.detailscreen;
 
 import android.support.annotation.NonNull;
 

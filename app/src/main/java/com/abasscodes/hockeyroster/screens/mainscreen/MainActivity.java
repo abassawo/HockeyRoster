@@ -1,4 +1,4 @@
-package com.abasscodes.hockeyroster.mainscreen;
+package com.abasscodes.hockeyroster.screens.mainscreen;
 
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -19,7 +19,7 @@ import android.widget.ImageView;
 
 import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.base.BaseMvpActivity;
-import com.abasscodes.hockeyroster.contactdetail.ViewPagerAdapter;
+import com.abasscodes.hockeyroster.screens.detailscreen.ViewPagerAdapter;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.utils.PageChangedListener;
 

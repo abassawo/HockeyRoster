@@ -1,6 +1,7 @@
-package com.abasscodes.hockeyroster.mainscreen;
+package com.abasscodes.hockeyroster.screens.mainscreen;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import com.abasscodes.hockeyroster.base.BasePresenter;
 import com.abasscodes.hockeyroster.model.Contact;
@@ -11,7 +12,8 @@ import com.abasscodes.hockeyroster.utils.TextFilterHelper;
 import java.util.List;
 
 class MainScreenPresenter extends BasePresenter<MainScreenContract.View> implements MainScreenContract.Presenter {
-    private boolean detailMode = false;
+    @VisibleForTesting
+    boolean detailMode = false;
     private List<Contact> contacts = null;
     private int currentDetailPage = 0;
 
@@ -25,6 +27,7 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
         if(detailMode) {
             if (contacts != null) {
                 view.onContactsReady(contacts);
+                showDetail(contacts.get(currentDetailPage));
             }
         }
         view.checkInternetAccess();
@@ -48,6 +51,8 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
     public void onBackPressed() {
         if(detailMode){
             doBackwardsDetailNavigation();
+        } else {
+            //have view do super on backpressed.
         }
     }
 
@@ -81,10 +86,10 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
 
     private void showDetail(Contact contact){
         detailMode = true;
-        view.navigateBackToDetailScreen();
         currentDetailPage = contacts.indexOf(contact);
         view.showContact(currentDetailPage);
         view.setTitle(contact.getName());
+        view.navigateBackToDetailScreen();
     }
 
     private void showList() {
