@@ -19,10 +19,6 @@ class MainScreenContract {
 
         void showContactList(List<Contact> contacts);
 
-        void navigateBackToListScreen();
-
-        void navigateBackToDetailScreen();
-
         void dismissScreen();
 
         void setTitle(String name);

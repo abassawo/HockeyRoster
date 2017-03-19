@@ -54,8 +54,6 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
     public void onBackPressedShouldCauseViewToGoToListWhenInDetailMode() {
         presenter.onBackPressed();
         verify(mockView).showContactList(any());
-        verify(mockView).navigateBackToListScreen();
-        verify(mockView).showContactList(anyList());
     }
 
     @Test
@@ -97,7 +95,7 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
     public void onBackPressedWhenInDetailModeShouldCauseViewToReturnToListScreen() {
         presenter.onContactClicked(mockContact);
         presenter.onBackPressed();
-        verify(mockView, times(2)).navigateBackToListScreen();
+        verify(mockView, times(2)).showContactList(anyList());
     }
 
     @Test

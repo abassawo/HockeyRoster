@@ -12,7 +12,7 @@ import com.abasscodes.hockeyroster.mainscreen.ContactViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder> {
     private final int layoutRes;
     private BaseViewHolder.OnItemClickListener listener;
     private final List<Contact> contacts = new ArrayList<>();
