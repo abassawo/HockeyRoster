@@ -15,7 +15,7 @@ import butterknife.BindView;
 
 import static android.view.View.OnClickListener;
 
-public class ContactViewHolder extends BaseViewHolder implements OnClickListener {
+class ContactViewHolder extends BaseViewHolder implements OnClickListener {
     @BindView(R.id.contact_name_textview)
     TextView contactNameTextView;
     @BindView(R.id.contact_team_position)
@@ -24,11 +24,11 @@ public class ContactViewHolder extends BaseViewHolder implements OnClickListener
     ImageView contactAvatar;
     private Contact contact;
 
-    public ContactViewHolder(ViewGroup parent, @LayoutRes int layoutRes, OnItemClickListener listener) {
+    ContactViewHolder(ViewGroup parent, @LayoutRes int layoutRes, OnItemClickListener listener) {
         super(parent, layoutRes, listener);
     }
 
-    public void bindContact(Contact contact) {
+    void bindContact(Contact contact) {
         this.contact = contact;
         contactNameTextView.setText(contact.getName());
         contactPositionTextField.setText(contact.getPosition());
