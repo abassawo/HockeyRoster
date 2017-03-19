@@ -30,11 +30,14 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
     protected void onViewBound() {
         super.onViewBound();
         Timber.d("Detail mode " + detailMode);
-
-        if (contacts != null) {
-            view.onContactsReady(contacts);
-            showDetail(contacts.get(currentDetailPage));
-        }
+//        if (contacts != null) {
+////            view.onContactsReady(contacts);
+//            if(detailMode) {
+//                showDetail(contacts.get(currentDetailPage));
+//            } else {
+//                view.showContactList(contacts);
+//            }
+//        }
 
         view.checkInternetAccess();
     }
@@ -69,10 +72,10 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
         }
         if (query.length() > 0) {
             final List<Contact> filteredContacts = TextFilterHelper.filter(contacts, query);
-            view.showContactList(filteredContacts);
             if (detailMode) {
                 view.navigateBackToListScreen();
             }
+            view.showContactList(filteredContacts);
         } else {
             view.showContactList(contacts);
         }
@@ -95,8 +98,8 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
 
     private void showList() {
         detailMode = false;
-        view.showContactList(contacts);
         view.navigateBackToListScreen();
+        view.showContactList(contacts);
     }
 
     @Override
@@ -111,6 +114,8 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
         if (detailMode) {
             showDetail(contacts.get(currentDetailPage));
         } else {
+            view.navigateBackToListScreen();
+            view.navigateBackToListScreen();
             view.showContactList(contacts);
         }
     }

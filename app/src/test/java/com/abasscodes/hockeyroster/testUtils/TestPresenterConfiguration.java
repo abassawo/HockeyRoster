@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import com.abasscodes.hockeyroster.network.RosterApi;
 import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 
+import org.mockito.Mockito;
+
 import io.reactivex.schedulers.TestScheduler;
 
 /**

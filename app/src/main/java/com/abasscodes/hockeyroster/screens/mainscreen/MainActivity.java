@@ -66,6 +66,7 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        detailViewPager.setVisibility(View.GONE);
         setSupportActionBar(toolbar);
         initializeViews();
     }
@@ -122,7 +123,6 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
 
     @Override
     public void showContactList(List<Contact> contacts) {
-        navigateBackToListScreen();
         rosterRecyclerView.setVisibility(View.VISIBLE);
         contactListAdapter.setData(contacts);
     }
@@ -163,7 +163,7 @@ public class MainActivity extends BaseMvpActivity<MainScreenContract.Presenter> 
 
     @Override
     public void dismiss() {
-        super.onBackPressed();
+        moveTaskToBack(true);
     }
 
     @Override
