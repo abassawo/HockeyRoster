@@ -1,7 +1,5 @@
 package com.abasscodes.hockeyroster.network;
 
-import com.abasscodes.hockeyroster.R;
-import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.model.ContactWrapper;
 import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 import com.google.gson.FieldNamingPolicy;
@@ -9,14 +7,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.ObservableTransformer;
 import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -70,7 +65,7 @@ public class RosterClient {
         rosterApi = retrofit.create(RosterApi.class);
     }
 
-    protected <R> ObservableTransformer<R, R> subscribeOnIoObserveOnUi (PresenterConfiguration configuration) {
+    protected <R> ObservableTransformer<R, R> subscribeOnIoObserveOnUi(PresenterConfiguration configuration) {
         Scheduler ioScheduler = configuration.getIoScheduler();
         Scheduler uiScheduler = configuration.getUiScheduler();
         return observable -> observable.subscribeOn(ioScheduler).observeOn(uiScheduler);
@@ -80,7 +75,8 @@ public class RosterClient {
         return rosterApi.getRosterInformation()
                 .compose(subscribeOnIoObserveOnUi(configuration))
                 .subscribe(response -> {
-                    listener.onRosterLoaded(response);
-                }, throwable -> listener.onFailure(throwable.getMessage()));
+                               listener.onRosterLoaded(response);
+                           },
+                           throwable -> listener.onFailure(throwable.getMessage()));
     }
 }

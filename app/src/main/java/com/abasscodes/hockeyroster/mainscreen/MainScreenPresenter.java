@@ -20,13 +20,13 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
     MainScreenPresenter(@NonNull MainScreenContract.View view,
                         PresenterConfiguration configuration) {
         super(view, configuration);
+        detailMode = false;
         textFilterer = new TextFilterer();
     }
 
     @Override
     protected void onViewBound() {
         super.onViewBound();
-        detailMode = false;
         view.checkInternetAccess();
     }
 
