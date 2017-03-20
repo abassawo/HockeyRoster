@@ -1,6 +1,8 @@
 package com.abasscodes.hockeyroster.base;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
@@ -33,6 +35,20 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
         presenter = createPresenter(getRosterApplication().getPresenterConfiguration());
         onViewCreated(savedInstanceState);
         presenter.onViewCreated();
+    }
+
+    @Override
+    public void checkInternetAccess() {
+        ConnectivityManager connectivityMgr = (ConnectivityManager) getSystemService(
+                CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityMgr.getActiveNetworkInfo();
+        boolean internetOn = networkInfo != null && networkInfo.isConnected();
+        presenter.onInternetAccessCheckResult(internetOn);
+    }
+
+    @Override
+    public void showConnectionSettings() {
+        startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
     }
 
     @Override

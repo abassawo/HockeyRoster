@@ -1,8 +1,5 @@
 package com.abasscodes.hockeyroster.mainscreen;
 
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SnapHelper;
@@ -27,7 +24,8 @@ public class MainActivity extends ListDetailActivity<MainScreenContract.Presente
         presenter = (MainScreenContract.Presenter) getLastCustomNonConfigurationInstance();
         presenter = presenter == null ? new MainScreenPresenter(this, configuration) : presenter;
         contactListAdapter = new ContactAdapter(presenter);
-        detailViewPagerAdapter = new ContactAdapter(R.layout.contact_detail_viewpage_item, presenter);
+        detailViewPagerAdapter = new ContactAdapter(R.layout.contact_detail_viewpage_item,
+                                                    presenter);
         presenter.bindView(this);
         return presenter;
     }
@@ -105,20 +103,5 @@ public class MainActivity extends ListDetailActivity<MainScreenContract.Presente
     @Override
     public void onBackPressed() {
         presenter.onBackPressed();
-    }
-
-    @Override
-    public void checkInternetAccess() {
-        ConnectivityManager connectivityMgr = (ConnectivityManager) getSystemService(
-                CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityMgr.getActiveNetworkInfo();
-        boolean internetOn = networkInfo != null && networkInfo.isConnected();
-        presenter.onInternetAccessCheckResult(internetOn);
-    }
-
-
-    @Override
-    public void showConnectionSettings() {
-        startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
     }
 }

@@ -15,8 +15,6 @@ class MainScreenContract {
 
         void showContact(int index);
 
-        void checkInternetAccess();
-
         void showContactList(List<Contact> contacts);
 
         void dismissScreen();
