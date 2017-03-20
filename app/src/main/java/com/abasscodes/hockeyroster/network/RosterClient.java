@@ -65,7 +65,7 @@ public class RosterClient {
         rosterApi = retrofit.create(RosterApi.class);
     }
 
-    protected <R> ObservableTransformer<R, R> subscribeOnIoObserveOnUi(PresenterConfiguration configuration) {
+    private <R> ObservableTransformer<R, R> subscribeOnIoObserveOnUi(PresenterConfiguration configuration) {
         Scheduler ioScheduler = configuration.getIoScheduler();
         Scheduler uiScheduler = configuration.getUiScheduler();
         return observable -> observable.subscribeOn(ioScheduler).observeOn(uiScheduler);
@@ -74,9 +74,7 @@ public class RosterClient {
     public Disposable loadRosterList(PresenterConfiguration configuration) {
         return rosterApi.getRosterInformation()
                 .compose(subscribeOnIoObserveOnUi(configuration))
-                .subscribe(response -> {
-                               listener.onRosterLoaded(response);
-                           },
+                .subscribe(listener::onRosterLoaded,
                            throwable -> listener.onRosterLoadFailure(throwable.getMessage()));
     }
 }

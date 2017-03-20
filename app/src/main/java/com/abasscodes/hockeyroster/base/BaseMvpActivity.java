@@ -23,11 +23,10 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
     protected T presenter;
 
     @NonNull
-    public abstract T createPresenter(PresenterConfiguration configuration);
+    protected abstract T createPresenter(PresenterConfiguration configuration);
 
-    protected abstract
     @LayoutRes
-    int getLayoutRes();
+    protected abstract int getLayoutRes();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -2,8 +2,6 @@ package com.abasscodes.hockeyroster;
 
 import android.app.Application;
 
-import com.abasscodes.hockeyroster.network.MockRosterApi;
-import com.abasscodes.hockeyroster.network.RosterApi;
 import com.abasscodes.hockeyroster.network.RosterClient;
 import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 

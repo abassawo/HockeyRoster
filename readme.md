@@ -2,7 +2,7 @@
 
 The application consumes data from the following [endpoint](https://jc-xerxes.gpshopper.com/android_eval.json)
 
-Tools uses include
+Tools used include:
 
 - Retrofit
 - RxJava

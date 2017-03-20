@@ -9,12 +9,8 @@ import org.mockito.Mockito;
 
 import io.reactivex.schedulers.TestScheduler;
 
-/**
- * Created by abass on 3/18/17.
- */
-
 public class TestPresenterConfiguration extends PresenterConfiguration {
-    public TestPresenterConfiguration(@NonNull RosterApi restApi) {
+    private TestPresenterConfiguration(@NonNull RosterApi restApi) {
         super(new TestScheduler(), new TestScheduler(), restApi);
     }
 

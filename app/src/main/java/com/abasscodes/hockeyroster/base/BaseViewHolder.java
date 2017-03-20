@@ -11,11 +11,11 @@ import com.abasscodes.hockeyroster.model.Contact;
 import butterknife.ButterKnife;
 
 public class BaseViewHolder extends RecyclerView.ViewHolder {
-    protected OnItemClickListener listener;
+    protected final OnItemClickListener listener;
 
-    public BaseViewHolder(ViewGroup parent,
-                          @LayoutRes int layoutRes,
-                          OnItemClickListener listener) {
+    protected BaseViewHolder(ViewGroup parent,
+                             @LayoutRes int layoutRes,
+                             OnItemClickListener listener) {
         super(inflateView(parent, layoutRes));
         this.listener = listener;
         ButterKnife.bind(this, itemView);

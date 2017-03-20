@@ -11,17 +11,17 @@ import io.reactivex.disposables.Disposable;
 public abstract class BasePresenter<T extends BaseContract.View> implements BaseContract.Presenter<T> {
 
     @NonNull
-    protected final Scheduler ioScheduler;
+    private final Scheduler ioScheduler;
     @NonNull
-    protected final Scheduler uiScheduler;
+    private final Scheduler uiScheduler;
     @NonNull
-    protected final RosterApi restApi;
+    private final RosterApi restApi;
     protected final PresenterConfiguration configuration;
     protected T view;
     private boolean isViewBound = false;
     protected Disposable disposable;
 
-    public BasePresenter(@NonNull T view, PresenterConfiguration configuration) {
+    protected BasePresenter(@NonNull T view, PresenterConfiguration configuration) {
         this.view = view;
         this.configuration = configuration;
         this.ioScheduler = configuration.getIoScheduler();

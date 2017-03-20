@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">Hockey Roster</string>
-    <string name="error_msg">Unable to Connect to Internet</string>
 
     <string name="connection_error_msg">There was an error with the network</string>
     <string name="connect">Connect</string>
     <string name="search">Search</string>
-    <string name="next">Next</string>
-    <string name="last_profile_alert">This is the last profile</string>
     <string name="error_loading_data">Unable to load Roster data</string>
 </resources>

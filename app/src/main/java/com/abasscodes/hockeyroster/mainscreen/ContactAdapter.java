@@ -7,14 +7,13 @@ import android.view.ViewGroup;
 import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.base.BaseViewHolder;
 import com.abasscodes.hockeyroster.model.Contact;
-import com.abasscodes.hockeyroster.mainscreen.ContactViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder> {
     private final int layoutRes;
-    private BaseViewHolder.OnItemClickListener listener;
+    private final BaseViewHolder.OnItemClickListener listener;
     private final List<Contact> contacts = new ArrayList<>();
 
     ContactAdapter(BaseViewHolder.OnItemClickListener listener) {
