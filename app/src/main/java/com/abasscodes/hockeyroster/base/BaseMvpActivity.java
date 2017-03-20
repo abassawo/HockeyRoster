@@ -8,8 +8,10 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.abasscodes.hockeyroster.RosterApplication;
 import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
@@ -37,6 +39,15 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
         presenter.onViewCreated();
     }
 
+    protected void onViewCreated(Bundle savedInstanceState) {
+        //For subclass implementation
+    }
+
+    @Override
+    public void showToast(@StringRes int message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void checkInternetAccess() {
         ConnectivityManager connectivityMgr = (ConnectivityManager) getSystemService(
@@ -46,8 +57,7 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
         presenter.onInternetAccessCheckResult(internetOn);
     }
 
-    @Override
-    public void showConnectionSettings() {
+    protected void showConnectionSettings() {
         startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
     }
 
@@ -66,15 +76,6 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(upNavigation);
         }
-    }
-
-    @Override
-    public void showMessage(String message) {
-
-    }
-
-    protected void onViewCreated(Bundle savedInstanceState) {
-
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.abasscodes.hockeyroster.mainscreen;
 
 import android.support.annotation.NonNull;
 
+import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.base.BasePresenter;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.model.ContactWrapper;
@@ -10,6 +11,8 @@ import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 import com.abasscodes.hockeyroster.utils.TextFilterer;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 class MainScreenPresenter extends BasePresenter<MainScreenContract.View> implements MainScreenContract.Presenter {
     private boolean detailMode;
@@ -35,13 +38,8 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
         if (internetOn) {
             disposable = RosterClient.getInstance(this).loadRosterList(configuration);
         } else {
-            view.showMessage("Error retrofitting");
+            view.showNetworkSnackbarPrompt();
         }
-    }
-
-    @Override
-    public void onShowConnectionSettingsClicked() {
-        view.showConnectionSettings();
     }
 
     @Override
@@ -69,7 +67,7 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
     @Override
     public void onPageSwiped(int currentItem) {
         if (currentItem >= 0 && currentItem < contacts.size()) {
-            view.setTitle(contacts.get(currentItem).getName());
+            view.setActionBarTitle(contacts.get(currentItem).getName());
         }
     }
 
@@ -77,7 +75,7 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
         detailMode = true;
         currentDetailPage = contacts.indexOf(contact);
         view.showContact(currentDetailPage);
-        view.setTitle(contact.getName());
+        view.setActionBarTitle(contact.getName());
     }
 
     private void showList() {
@@ -87,6 +85,7 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
 
     @Override
     public void onContactClicked(Contact contact) {
+        view.hideKeyboard();
         showDetail(contact);
     }
 
@@ -102,9 +101,10 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
     }
 
     @Override
-    public void onFailure(String errorMsg) {
+    public void onRosterLoadFailure(String errorMsg) {
         if (view != null) {
-            view.showMessage(errorMsg);
+            Timber.d("Error retrofitting " + errorMsg);
+            view.showToast(R.string.error_loading_data);
         }
     }
 }

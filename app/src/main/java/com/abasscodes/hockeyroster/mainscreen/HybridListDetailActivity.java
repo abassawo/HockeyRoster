@@ -1,8 +1,10 @@
 package com.abasscodes.hockeyroster.mainscreen;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -11,12 +13,16 @@ import android.view.View;
 import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.base.BaseContract;
 import com.abasscodes.hockeyroster.base.BaseMvpActivity;
-import com.abasscodes.hockeyroster.base.ListDetailView;
+import com.abasscodes.hockeyroster.base.HybridListDetailView;
 
 import butterknife.BindView;
 
-public abstract class ListDetailActivity<T extends BaseContract.Presenter>
-        extends BaseMvpActivity<T> implements ListDetailView {
+import static android.support.v7.widget.LinearLayoutManager.HORIZONTAL;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
+public abstract class HybridListDetailActivity<T extends BaseContract.Presenter>
+        extends BaseMvpActivity<T> implements HybridListDetailView {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.roster_recycler_view)
@@ -25,11 +31,10 @@ public abstract class ListDetailActivity<T extends BaseContract.Presenter>
     RecyclerView detailRecyclerViewPager;
     @BindView(R.id.appbar)
     AppBarLayout appbar;
-    @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbar;
     protected ContactAdapter contactListAdapter;
     protected ContactAdapter detailViewPagerAdapter;
     protected boolean searchIconVisible = true;
+    protected boolean listVisible;
 
     @Override
     protected int getLayoutRes() {
@@ -37,8 +42,8 @@ public abstract class ListDetailActivity<T extends BaseContract.Presenter>
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onViewCreated(Bundle savedInstanceState) {
+        super.onViewCreated(savedInstanceState);
         setSupportActionBar(toolbar);
         initializeViews();
     }
@@ -46,29 +51,46 @@ public abstract class ListDetailActivity<T extends BaseContract.Presenter>
     protected void initializeViews() {
         rosterRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rosterRecyclerView.setAdapter(contactListAdapter);
-        detailRecyclerViewPager.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        LinearLayoutManager horizontalLm = new LinearLayoutManager(this, HORIZONTAL, false);
+        detailRecyclerViewPager.setLayoutManager(horizontalLm);
         detailRecyclerViewPager.setAdapter(detailViewPagerAdapter);
     }
 
     @Override
-    public void bringListScreenToFront() {
+    public void showNetworkSnackbarPrompt() {
+        final View view = findViewById(R.id.main_content);
+        Snackbar.make(view, R.string.connection_error_msg, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.connect, v -> showConnectionSettings())
+                .show();
+    }
+
+    private void resetActionBar() {
         setActionBarAsUp(false);
         toolbar.setTitle(R.string.app_name);
         toolbar.setSubtitle("");
-        collapsingToolbar.setTitle(getString(R.string.app_name));
         appbar.setExpanded(false);
-        searchIconVisible = true;
+    }
+
+    private void setSearchIconVisible(boolean visible) {
+        searchIconVisible = visible;
         supportInvalidateOptionsMenu();
-        detailRecyclerViewPager.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void bringListScreenToFront() {
+        listVisible = true;
+        resetActionBar();
+        setSearchIconVisible(true);
+        detailRecyclerViewPager.setVisibility(INVISIBLE);
     }
 
     @Override
     public void bringDetailScreenToFront() {
+        listVisible = false;
+        setSearchIconVisible(false);
         appbar.setExpanded(false);
-        searchIconVisible = false;
         setActionBarAsUp(true);
-        supportInvalidateOptionsMenu();
-        detailRecyclerViewPager.setVisibility(View.VISIBLE);
-        rosterRecyclerView.setVisibility(View.INVISIBLE);
+        detailRecyclerViewPager.setVisibility(VISIBLE);
+        rosterRecyclerView.setVisibility(INVISIBLE);
     }
 }

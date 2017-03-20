@@ -1,12 +1,13 @@
 package com.abasscodes.hockeyroster.mainscreen;
 
 import com.abasscodes.hockeyroster.base.BaseContract;
-import com.abasscodes.hockeyroster.base.BaseViewHolder;
 import com.abasscodes.hockeyroster.model.Contact;
-import com.abasscodes.hockeyroster.network.RosterClient;
-import com.abasscodes.hockeyroster.utils.CustomSnapHelper;
 
 import java.util.List;
+
+import static com.abasscodes.hockeyroster.base.BaseViewHolder.OnItemClickListener;
+import static com.abasscodes.hockeyroster.network.RosterClient.OnClientResponseListener;
+import static com.abasscodes.hockeyroster.utils.CustomSnapHelper.OnPageSwipeListener;
 
 class MainScreenContract {
     interface View extends BaseContract.View {
@@ -17,17 +18,14 @@ class MainScreenContract {
 
         void showContactList(List<Contact> contacts);
 
+        void hideKeyboard();
+
         void dismissScreen();
-
-        void setTitle(String name);
-
     }
 
-    interface Presenter extends BaseContract.Presenter<View>, RosterClient.OnClientResponseListener,
-            BaseViewHolder.OnItemClickListener, CustomSnapHelper.OnPageSwipeListener{
+    interface Presenter extends BaseContract.Presenter<View>, OnClientResponseListener,
+            OnItemClickListener, OnPageSwipeListener {
         void onInternetAccessCheckResult(boolean internetOn);
-
-        void onShowConnectionSettingsClicked();
 
         void onBackPressed();
 

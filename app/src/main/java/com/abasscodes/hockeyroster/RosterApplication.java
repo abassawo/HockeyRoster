@@ -20,12 +20,7 @@ public class RosterApplication extends Application {
     }
 
     public PresenterConfiguration getPresenterConfiguration() {
-        return getPresenterConfiguration(false);
-    }
-
-    public PresenterConfiguration getPresenterConfiguration(boolean mock) {
-        RosterApi rosterApi = mock ? new MockRosterApi() : RosterClient.getApi();
         return new PresenterConfiguration(Schedulers.io(),
-                                          AndroidSchedulers.mainThread(), rosterApi);
+                                          AndroidSchedulers.mainThread(), RosterClient.getApi());
     }
 }

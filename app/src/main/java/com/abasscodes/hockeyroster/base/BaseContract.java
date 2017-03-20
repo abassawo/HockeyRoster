@@ -1,12 +1,16 @@
 package com.abasscodes.hockeyroster.base;
 
+import android.support.annotation.StringRes;
+
 public class BaseContract {
     public interface View {
-        void showConnectionSettings();
+        void setActionBarTitle(String name);
 
         void checkInternetAccess();
 
-        void showMessage(String message);
+        void showToast(@StringRes int message);
+
+        void showNetworkSnackbarPrompt();
     }
 
     public interface Presenter<T extends View> {

@@ -6,19 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.model.Contact;
 
 import butterknife.ButterKnife;
 
-/**
- * Created by abass on 3/17/17.
- */
-
 public class BaseViewHolder extends RecyclerView.ViewHolder {
     protected OnItemClickListener listener;
 
-    public BaseViewHolder(ViewGroup parent, @LayoutRes int layoutRes, OnItemClickListener listener) {
+    public BaseViewHolder(ViewGroup parent,
+                          @LayoutRes int layoutRes,
+                          OnItemClickListener listener) {
         super(inflateView(parent, layoutRes));
         this.listener = listener;
         ButterKnife.bind(this, itemView);

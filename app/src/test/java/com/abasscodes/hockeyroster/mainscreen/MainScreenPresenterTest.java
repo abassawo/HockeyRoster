@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -60,10 +61,20 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
     public void onRosterLoadedWhenInDetailModeShouldCauseViewToReloadDetailPage() {
         when(mockContact.getName()).thenReturn("Tester");
         when(mockContacts.get(anyInt())).thenReturn(mockContact);
+
         presenter.onContactClicked(mockContact);
         presenter.onRosterLoaded(new ContactWrapper(mockContacts));
+
         verify(mockView, times(2)).showContact(anyInt());
-        verify(mockView, times(2)).setTitle(anyString());
+        verify(mockView, times(2)).setActionBarTitle(anyString());
+    }
+
+    @Test
+    public void onContactClickedShouldCauseViewToHideKeyboardAndShowContact() {
+        presenter.onContactClicked(mockContact);
+
+        verify(mockView).hideKeyboard();
+        verify(mockView).showContact(anyInt());
     }
 
     @Test
@@ -78,7 +89,9 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
     public void onQueryChangedToZeroLengthStringShouldCauseViewToShowOriginalListAgain() {
         presenter.onViewBound();
         String EMPTY_TEXT = "";
+
         presenter.onQueryChanged(EMPTY_TEXT);
+
         verify(mockView, times(2)).showContactList(mockContacts);
     }
 
@@ -86,8 +99,10 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
     public void onQueryChangedToValidTextShouldCauseViewToShowSearchedSubList() {
         when(mockIterator.next()).thenReturn(mockContact);
         when(mockContacts.iterator()).thenReturn(mockIterator);
+
         String VALID_TEXT = "test";
         presenter.onQueryChanged(VALID_TEXT);
+
         verify(mockView).showContactList(argThat(argument -> argument.size() < mockContacts.size()));
     }
 
@@ -114,19 +129,13 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
         presenter.onViewBound();
         presenter.onPageSwiped(0);
 
-        verify(mockView).setTitle(anyString());
+        verify(mockView).setActionBarTitle(anyString());
     }
 
     @Test
-    public void onShowConnectionSettingsClickedShouldCauseViewToShowConnectionSettings() {
-        presenter.onShowConnectionSettingsClicked();
-        verify(mockView).showConnectionSettings();
-    }
-
-    @Test
-    public void onInternetAccessCheckResultNegativeShouldCauseViewToShowMessage() {
+    public void onInternetAccessCheckResultNegativeShouldCauseViewToShowNetworkSnackbar() {
         presenter.onInternetAccessCheckResult(false);
-        verify(mockView).showMessage(anyString());
+        verify(mockView).showNetworkSnackbarPrompt();
     }
 
     @Test
@@ -138,7 +147,7 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
 
     @Test
     public void onRosterLoadingFailureShouldCauseViewToShowErrorMessage() {
-        presenter.onFailure(anyString());
-        verify(mockView).showMessage(anyString());
+        presenter.onRosterLoadFailure(anyString());
+        verify(mockView).showToast(anyInt());
     }
 }

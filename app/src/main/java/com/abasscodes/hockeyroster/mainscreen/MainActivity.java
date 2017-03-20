@@ -6,6 +6,7 @@ import android.support.v7.widget.SnapHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.model.Contact;
@@ -16,7 +17,7 @@ import java.util.List;
 
 import static android.support.v7.widget.SearchView.OnQueryTextListener;
 
-public class MainActivity extends ListDetailActivity<MainScreenContract.Presenter> implements MainScreenContract.View {
+public class MainActivity extends HybridListDetailActivity<MainScreenContract.Presenter> implements MainScreenContract.View {
 
     @NonNull
     @Override
@@ -75,10 +76,12 @@ public class MainActivity extends ListDetailActivity<MainScreenContract.Presente
         detailViewPagerAdapter.setData(contacts);
     }
 
-
     @Override
     public void showContactList(List<Contact> contacts) {
-        bringListScreenToFront();
+        if (!listVisible) {
+            // Avoid unnecessary ActionBar toggles if listVisible
+            bringListScreenToFront();
+        }
         rosterRecyclerView.setVisibility(View.VISIBLE);
         contactListAdapter.setData(contacts);
     }
@@ -95,13 +98,21 @@ public class MainActivity extends ListDetailActivity<MainScreenContract.Presente
     }
 
     @Override
-    public void setTitle(String name) {
-        collapsingToolbar.setTitle(name);
+    public void setActionBarTitle(String name) {
         toolbar.setSubtitle(name);
     }
 
     @Override
     public void onBackPressed() {
         presenter.onBackPressed();
+    }
+
+    @Override
+    public void hideKeyboard() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
