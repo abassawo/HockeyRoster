@@ -5,10 +5,6 @@ import com.abasscodes.hockeyroster.model.Contact;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by abass on 3/19/17.
- */
-
 public class TextFilterer {
 
     public List<Contact> filter(List<Contact> contacts, String query) {
