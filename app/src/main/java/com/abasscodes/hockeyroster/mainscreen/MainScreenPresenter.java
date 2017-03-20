@@ -87,6 +87,7 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
 
     @Override
     public void onContactClicked(Contact contact) {
+        view.hideKeyboard();
         showDetail(contact);
     }
 
@@ -102,7 +103,7 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
     }
 
     @Override
-    public void onFailure(String errorMsg) {
+    public void onRosterLoadFailure(String errorMsg) {
         if (view != null) {
             view.showMessage(errorMsg);
         }

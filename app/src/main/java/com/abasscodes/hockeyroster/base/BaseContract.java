@@ -1,7 +1,5 @@
 package com.abasscodes.hockeyroster.base;
 
-import android.support.annotation.StringRes;
-
 public class BaseContract {
     public interface View {
         void showConnectionSettings();

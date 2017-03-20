@@ -138,7 +138,7 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
 
     @Test
     public void onRosterLoadingFailureShouldCauseViewToShowErrorMessage() {
-        presenter.onFailure(anyString());
+        presenter.onRosterLoadFailure(anyString());
         verify(mockView).showMessage(anyString());
     }
 }

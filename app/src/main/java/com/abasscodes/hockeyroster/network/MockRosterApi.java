@@ -12,6 +12,6 @@ public class MockRosterApi implements RosterApi {
 
     @Override
     public Observable<ContactWrapper> getRosterInformation() {
-        return Observable.just(new ContactWrapper(new ArrayList<Contact>()));
+        return Observable.just(new ContactWrapper(new ArrayList<>()));
     }
 }

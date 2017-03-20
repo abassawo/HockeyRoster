@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.abasscodes.hockeyroster.RosterApplication;
 import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
@@ -35,6 +36,10 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
         presenter.onViewCreated();
     }
 
+    protected void onViewCreated(Bundle savedInstanceState) {
+        //For subclass implementation
+    }
+
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
         //Used to persist presenter data throughout configuration changes.
@@ -54,11 +59,7 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
 
     @Override
     public void showMessage(String message) {
-
-    }
-
-    protected void onViewCreated(Bundle savedInstanceState) {
-
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

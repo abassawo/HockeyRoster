@@ -33,7 +33,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder> {
 
     @Override
     public void onBindViewHolder(ContactViewHolder holder, int position) {
-        holder.bindContact(contacts.get(position));
+        Contact contact = contacts.get(position);
+        holder.bindContact(contact);
     }
 
     @Override
