@@ -11,12 +11,14 @@ import android.view.View;
 import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.base.BaseContract;
 import com.abasscodes.hockeyroster.base.BaseMvpActivity;
-import com.abasscodes.hockeyroster.base.ListDetailView;
+import com.abasscodes.hockeyroster.base.HybridListDetailView;
 
 import butterknife.BindView;
 
-public abstract class ListDetailActivity<T extends BaseContract.Presenter>
-        extends BaseMvpActivity<T> implements ListDetailView {
+import static android.support.v7.widget.LinearLayoutManager.HORIZONTAL;
+
+public abstract class HybridListDetailActivity<T extends BaseContract.Presenter>
+        extends BaseMvpActivity<T> implements HybridListDetailView {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.roster_recycler_view)
@@ -25,11 +27,10 @@ public abstract class ListDetailActivity<T extends BaseContract.Presenter>
     RecyclerView detailRecyclerViewPager;
     @BindView(R.id.appbar)
     AppBarLayout appbar;
-    @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbar;
     protected ContactAdapter contactListAdapter;
     protected ContactAdapter detailViewPagerAdapter;
     protected boolean searchIconVisible = true;
+    protected boolean listVisible;
 
     @Override
     protected int getLayoutRes() {
@@ -37,8 +38,8 @@ public abstract class ListDetailActivity<T extends BaseContract.Presenter>
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onViewCreated(Bundle savedInstanceState) {
+        super.onViewCreated(savedInstanceState);
         setSupportActionBar(toolbar);
         initializeViews();
     }
@@ -46,28 +47,38 @@ public abstract class ListDetailActivity<T extends BaseContract.Presenter>
     protected void initializeViews() {
         rosterRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         rosterRecyclerView.setAdapter(contactListAdapter);
-        detailRecyclerViewPager.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        detailRecyclerViewPager.setLayoutManager(new LinearLayoutManager(this,
+                                                                         HORIZONTAL,
+                                                                         false));
         detailRecyclerViewPager.setAdapter(detailViewPagerAdapter);
+    }
+
+    private void resetActionBar() {
+        setActionBarAsUp(false);
+        toolbar.setTitle(R.string.app_name);
+        appbar.setExpanded(false);
+    }
+
+    private void setSearchIconVisible(boolean visible) {
+        searchIconVisible = visible;
+        supportInvalidateOptionsMenu();
     }
 
     @Override
     public void bringListScreenToFront() {
-        setActionBarAsUp(false);
-        toolbar.setTitle(R.string.app_name);
+        listVisible = true;
+        resetActionBar();
+        setSearchIconVisible(true);
         toolbar.setSubtitle("");
-        collapsingToolbar.setTitle(getString(R.string.app_name));
-        appbar.setExpanded(false);
-        searchIconVisible = true;
-        supportInvalidateOptionsMenu();
         detailRecyclerViewPager.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void bringDetailScreenToFront() {
+        listVisible = false;
+        setSearchIconVisible(false);
         appbar.setExpanded(false);
-        searchIconVisible = false;
         setActionBarAsUp(true);
-        supportInvalidateOptionsMenu();
         detailRecyclerViewPager.setVisibility(View.VISIBLE);
         rosterRecyclerView.setVisibility(View.INVISIBLE);
     }

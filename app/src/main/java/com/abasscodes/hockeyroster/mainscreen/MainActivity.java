@@ -9,6 +9,7 @@ import android.support.v7.widget.SnapHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.model.Contact;
@@ -19,7 +20,7 @@ import java.util.List;
 
 import static android.support.v7.widget.SearchView.OnQueryTextListener;
 
-public class MainActivity extends ListDetailActivity<MainScreenContract.Presenter> implements MainScreenContract.View {
+public class MainActivity extends HybridListDetailActivity<MainScreenContract.Presenter> implements MainScreenContract.View {
 
     @NonNull
     @Override
@@ -27,7 +28,8 @@ public class MainActivity extends ListDetailActivity<MainScreenContract.Presente
         presenter = (MainScreenContract.Presenter) getLastCustomNonConfigurationInstance();
         presenter = presenter == null ? new MainScreenPresenter(this, configuration) : presenter;
         contactListAdapter = new ContactAdapter(presenter);
-        detailViewPagerAdapter = new ContactAdapter(R.layout.contact_detail_viewpage_item, presenter);
+        detailViewPagerAdapter = new ContactAdapter(R.layout.contact_detail_viewpage_item,
+                                                    presenter);
         presenter.bindView(this);
         return presenter;
     }
@@ -80,14 +82,18 @@ public class MainActivity extends ListDetailActivity<MainScreenContract.Presente
 
     @Override
     public void showContactList(List<Contact> contacts) {
-        bringListScreenToFront();
+        if(!listVisible) {
+            bringListScreenToFront();
+        }
         rosterRecyclerView.setVisibility(View.VISIBLE);
         contactListAdapter.setData(contacts);
     }
 
     @Override
     public void showContact(int index) {
-        bringDetailScreenToFront();
+        if(listVisible) {
+            bringDetailScreenToFront();
+        }
         detailRecyclerViewPager.scrollToPosition(index);
     }
 
@@ -98,7 +104,6 @@ public class MainActivity extends ListDetailActivity<MainScreenContract.Presente
 
     @Override
     public void setTitle(String name) {
-        collapsingToolbar.setTitle(name);
         toolbar.setSubtitle(name);
     }
 
@@ -109,13 +114,21 @@ public class MainActivity extends ListDetailActivity<MainScreenContract.Presente
 
     @Override
     public void checkInternetAccess() {
-        ConnectivityManager connectivityMgr = (ConnectivityManager) getSystemService(
+        ConnectivityManager connectionMgr = (ConnectivityManager) getSystemService(
                 CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityMgr.getActiveNetworkInfo();
+        NetworkInfo networkInfo = connectionMgr.getActiveNetworkInfo();
         boolean internetOn = networkInfo != null && networkInfo.isConnected();
         presenter.onInternetAccessCheckResult(internetOn);
     }
 
+    @Override
+    public void hideKeyboard() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 
     @Override
     public void showConnectionSettings() {

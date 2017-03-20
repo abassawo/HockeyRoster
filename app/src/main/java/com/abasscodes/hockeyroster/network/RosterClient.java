@@ -32,7 +32,7 @@ public class RosterClient {
     public interface OnClientResponseListener {
         void onRosterLoaded(ContactWrapper roster);
 
-        void onFailure(String errorMsg);
+        void onRosterLoadFailure(String errorMsg);
     }
 
     public static RosterClient getInstance(OnClientResponseListener listener) {
@@ -77,6 +77,6 @@ public class RosterClient {
                 .subscribe(response -> {
                                listener.onRosterLoaded(response);
                            },
-                           throwable -> listener.onFailure(throwable.getMessage()));
+                           throwable -> listener.onRosterLoadFailure(throwable.getMessage()));
     }
 }
