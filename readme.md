@@ -1,6 +1,6 @@
 ### Hockey Roster
 
-The application consumes data from the following [endpoint](https://jc-xerxes.gpshopper.com/android_eval.json)
+The application consumes Hockey Roster data from a restful api.
 
 Tools used include:
 
@@ -35,3 +35,7 @@ It may have been possible to attempt using one recycler view to represent both t
 #### On Testing
 
 The test cases in this application cover the MainScreenPresenter's logic, but the HybridListDetailActivity logic of the activity makes the case for testing the activity's interactions as well. Given more time, I would have liked to incorporate some espresso tests. Also, it would have been helpful to further setup the MockApi and use a tool like MockWebServer to test the network layer.
+
+#### More: 
+
+I enjoyed working on this project, and wanted to learn more about Spring Boot for bootstrapping the development of a restful api. The dev branch of this repository consumes data from the following endpoint hosted on [Heroku](https://hockeyserver.herokuapp.com/api/v1/roster). The source code lives at: https://github.com/abassawo/hockeyappserver
