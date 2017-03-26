@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.abasscodes.hockeyroster.R;
+import com.abasscodes.hockeyroster.mainscreen.adapter.ContactAdapter;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.utils.CustomSnapHelper;
 import com.abasscodes.hockeyroster.utils.PresenterConfiguration;

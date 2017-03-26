@@ -1,4 +1,4 @@
-package com.abasscodes.hockeyroster.mainscreen;
+package com.abasscodes.hockeyroster.mainscreen.adapter;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
@@ -16,11 +16,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder> {
     private final BaseViewHolder.OnItemClickListener listener;
     private final List<Contact> contacts = new ArrayList<>();
 
-    ContactAdapter(BaseViewHolder.OnItemClickListener listener) {
+    public ContactAdapter(BaseViewHolder.OnItemClickListener listener) {
         this(R.layout.contact_row_item, listener);
     }
 
-    ContactAdapter(@LayoutRes int layoutRes, BaseViewHolder.OnItemClickListener listener) {
+    public ContactAdapter(@LayoutRes int layoutRes, BaseViewHolder.OnItemClickListener listener) {
         this.layoutRes = layoutRes;
         this.listener = listener;
     }
