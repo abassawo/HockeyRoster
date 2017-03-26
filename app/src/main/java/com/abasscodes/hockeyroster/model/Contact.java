@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class Contact {
     private String name;
     private String position;
-    @SerializedName("image_url")
+    @SerializedName("imageUrl")
     private String imageUrl;
 
     public String getName() {

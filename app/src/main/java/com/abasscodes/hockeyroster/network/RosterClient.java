@@ -46,6 +46,7 @@ public class RosterClient {
         this.listener = listener;
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setLenient()
                 .setPrettyPrinting()
                 .create();
         GsonConverterFactory gsonConverter = GsonConverterFactory.create(gson);
