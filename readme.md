@@ -1,6 +1,6 @@
 ### Hockey Roster
 
-The application consumes data from the following [endpoint](https://jc-xerxes.gpshopper.com/android_eval.json)
+The application consumes data from a restful api
 
 Tools used include:
 
