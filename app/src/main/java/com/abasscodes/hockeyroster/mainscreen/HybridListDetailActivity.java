@@ -12,6 +12,7 @@ import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.base.BaseContract;
 import com.abasscodes.hockeyroster.base.BaseMvpActivity;
 import com.abasscodes.hockeyroster.base.HybridListDetailView;
+import com.abasscodes.hockeyroster.mainscreen.adapter.ContactAdapter;
 
 import butterknife.BindView;
 
