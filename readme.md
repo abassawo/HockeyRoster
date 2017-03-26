@@ -1,6 +1,6 @@
 ### Hockey Roster
 
-The application consumes Hockey Roster data from a restful api.
+The application consumes data from a restful api
 
 Tools used include:
 
