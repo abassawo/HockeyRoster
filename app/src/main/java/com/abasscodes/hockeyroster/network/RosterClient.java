@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
 
 public class RosterClient {
-    private static final String BASE_URL = "https://jc-xerxes.gpshopper.com/";
+    private static final String BASE_URL = "https://hockeyserver.herokuapp.com";
     private static final long CONNECTION_TIMEOUT = 30;
     private static RosterClient clientInstance;
     private final OnClientResponseListener listener;
