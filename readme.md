@@ -38,4 +38,4 @@ The test cases in this application cover the MainScreenPresenter's logic, but th
 
 #### More: 
 
-I enjoyed working on this project, and wanted to learn more about Spring Boot for bootstrapping the development of a restful api. The dev branch of this repository consumes data from the following endpoint hosted on [Heroku](https://hockeyserver.herokuapp.com/api/v1/roster). The source code lives at: https://github.com/abassawo/hockeyappserver
+I enjoyed working on this project, and wanted to learn more about Spring Boot for bootstrapping the development of a restful api. The dev branch of this repository consumes data from the following [Heroku-hosted endpoint](https://hockeyserver.herokuapp.com/api/v1/roster). The source code for the Heroku Server lives at: https://github.com/abassawo/hockeyappserver
