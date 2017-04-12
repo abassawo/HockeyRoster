@@ -1,8 +1,6 @@
 package com.abasscodes.hockeyroster.base;
 
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
@@ -45,15 +43,6 @@ public abstract class BaseMvpActivity<T extends BaseContract.Presenter> extends 
     @Override
     public void showToast(@StringRes int message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void checkInternetAccess() {
-        ConnectivityManager connectivityMgr = (ConnectivityManager) getSystemService(
-                CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityMgr.getActiveNetworkInfo();
-        boolean internetOn = networkInfo != null && networkInfo.isConnected();
-        presenter.onInternetAccessCheckResult(internetOn);
     }
 
     protected void showConnectionSettings() {

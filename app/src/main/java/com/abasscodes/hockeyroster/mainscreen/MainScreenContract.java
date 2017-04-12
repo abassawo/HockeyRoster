@@ -2,6 +2,7 @@ package com.abasscodes.hockeyroster.mainscreen;
 
 import com.abasscodes.hockeyroster.base.BaseContract;
 import com.abasscodes.hockeyroster.model.Contact;
+import com.abasscodes.hockeyroster.utils.NetworkVerifier;
 
 import java.util.List;
 
@@ -21,12 +22,12 @@ class MainScreenContract {
         void hideKeyboard();
 
         void dismissScreen();
+
+        NetworkVerifier getNetworkVerifier();
     }
 
     interface Presenter extends BaseContract.Presenter<View>, OnClientResponseListener,
             OnItemClickListener, OnPageSwipeListener {
-        void onInternetAccessCheckResult(boolean internetOn);
-
         void onBackPressed();
 
         void onQueryChanged(String query);

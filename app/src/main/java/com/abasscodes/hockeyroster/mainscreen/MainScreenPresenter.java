@@ -7,6 +7,7 @@ import com.abasscodes.hockeyroster.base.BasePresenter;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.model.ContactWrapper;
 import com.abasscodes.hockeyroster.network.RosterClient;
+import com.abasscodes.hockeyroster.utils.NetworkVerifier;
 import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 import com.abasscodes.hockeyroster.utils.TextFilterer;
 
@@ -19,6 +20,7 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
     private List<Contact> contacts = null;
     private int currentDetailPage = 0;
     private TextFilterer textFilterer;
+    private NetworkVerifier verifier;
 
     MainScreenPresenter(@NonNull MainScreenContract.View view,
                         PresenterConfiguration configuration) {
@@ -30,11 +32,11 @@ class MainScreenPresenter extends BasePresenter<MainScreenContract.View> impleme
     @Override
     protected void onViewBound() {
         super.onViewBound();
-        view.checkInternetAccess();
+        verifier = view.getNetworkVerifier();
+        onInternetAccessCheckResult(verifier.checkInternetAccess());
     }
 
-    @Override
-    public void onInternetAccessCheckResult(boolean internetOn) {
+    private void onInternetAccessCheckResult(boolean internetOn) {
         if (internetOn) {
             disposable = RosterClient.getInstance(this).loadRosterList(configuration);
         } else {

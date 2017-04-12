@@ -3,6 +3,7 @@ package com.abasscodes.hockeyroster.mainscreen;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.model.ContactWrapper;
 import com.abasscodes.hockeyroster.testUtils.BasePresenterTest;
+import com.abasscodes.hockeyroster.utils.NetworkVerifier;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,21 +30,17 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
     Contact mockContact;
     @Mock
     Iterator<Contact> mockIterator;
+    @Mock
+    NetworkVerifier mockNetworkVerifier;
 
     @Before
     public void setup() {
+        when(mockView.getNetworkVerifier()).thenReturn(mockNetworkVerifier);
         presenter = new MainScreenPresenter(mockView, testConfiguration);
         presenter.onViewCreated();
         when(mockContacts.size()).thenReturn(14);
         ContactWrapper contactWrapper = new ContactWrapper(mockContacts);
         presenter.onRosterLoaded(contactWrapper);
-    }
-
-
-    @Test
-    public void onViewBoundShouldCauseViewToCheckInternetAccess() {
-        presenter.onViewBound();
-        verify(mockView).checkInternetAccess();
     }
 
     @Test
@@ -82,6 +79,8 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
 
     @Test
     public void onQueryChangedToZeroLengthStringShouldCauseViewToShowOriginalListAgain() {
+//        when(mockBaseActivity.getSystemService(CONNECTIVITY_SERVICE)).thenReturn(mockNetworkInfo);
+        when(mockNetworkVerifier.checkInternetAccess()).thenReturn(true);
         presenter.onViewBound();
         String EMPTY_TEXT = "";
 
@@ -127,18 +126,6 @@ public class MainScreenPresenterTest extends BasePresenterTest<MainScreenPresent
         verify(mockView).setActionBarTitle(anyString());
     }
 
-    @Test
-    public void onInternetAccessCheckResultNegativeShouldCauseViewToShowNetworkSnackbar() {
-        presenter.onInternetAccessCheckResult(false);
-        verify(mockView).showNetworkSnackbarPrompt();
-    }
-
-    @Test
-    public void onInternetAccessCheckResultPositiveShouldTriggerApiCall() {
-        presenter.onInternetAccessCheckResult(true);
-        testConfiguration.triggerRxSchedulers();
-        verify(mockView).onContactsReady(mockContacts);
-    }
 
     @Test
     public void onRosterLoadingFailureShouldCauseViewToShowErrorMessage() {

@@ -12,6 +12,7 @@ import com.abasscodes.hockeyroster.R;
 import com.abasscodes.hockeyroster.mainscreen.adapter.ContactAdapter;
 import com.abasscodes.hockeyroster.model.Contact;
 import com.abasscodes.hockeyroster.utils.CustomSnapHelper;
+import com.abasscodes.hockeyroster.utils.NetworkVerifier;
 import com.abasscodes.hockeyroster.utils.PresenterConfiguration;
 
 import java.util.List;
@@ -106,6 +107,10 @@ public class MainActivity extends HybridListDetailActivity<MainScreenContract.Pr
     @Override
     public void onBackPressed() {
         presenter.onBackPressed();
+    }
+
+    public NetworkVerifier getNetworkVerifier() {
+        return new NetworkVerifier(this);
     }
 
     @Override
